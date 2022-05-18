@@ -19,7 +19,8 @@ class Post extends Model
         return $slug;
     }
 
-    // public function setSlug() {
-    //     $this->slug = $this->generateSlug();
-    // }
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 }
