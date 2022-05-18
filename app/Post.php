@@ -23,4 +23,9 @@ class Post extends Model
     {
         return 'slug';
     }
+
+    public function setSlug($value)
+    {
+        $this->slug = self::generateSlug($value);
+    }
 }

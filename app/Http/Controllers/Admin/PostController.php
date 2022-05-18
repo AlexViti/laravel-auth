@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+    protected $validationRules = [
+        'title' => 'required|max:100',
+        'body' => 'required',
+    ];
     /**
      * Display a listing of the resource.
      *
@@ -26,7 +30,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.posts.create');
     }
 
     /**
@@ -37,7 +41,12 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, $this->validationRules);
+
+        $post = $request->all();
+        $post['slug'] = Post::generateSlug($post['title']);
+        $post = Post::create($post);
+        return redirect()->route('admin.posts.edit', $post->slug)->with('status', 'Your post has been created');
     }
 
     /**
@@ -60,7 +69,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        return view('admin.posts.edit', compact('post'));
     }
 
     /**
@@ -72,7 +81,9 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $this->validate($request, $this->validationRules);
+        $post->update($request->all());
+        return redirect()->route('admin.posts.edit', $post->slug)->with('status', 'Your post has been updated');
     }
 
     /**
@@ -83,6 +94,14 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $previousUrl = url()->previous();
+
+        if ($previousUrl === route('admin.posts.edit', $post->slug)) {
+            $previousUrl = route('admin.posts.index');
+        }
+
+        $post->delete();
+
+        return redirect($previousUrl)->with('status', 'Your post has been deleted');
     }
 }

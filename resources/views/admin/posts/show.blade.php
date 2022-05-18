@@ -7,13 +7,8 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-10">
-                <div class="card">
-                    <div class="card-header">{{ $post->title }}</div>
-
-                    <div class="card-body">
-                        <p>{{ $post->body }}</p>
-                    </div>
-                </div>
+                <h1 class="text-capitalize">{{ $post->title }}</h1>
+                <p>{{ $post->body }}</p>
             </div>
         </div>
     </div>
